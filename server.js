@@ -161,17 +161,29 @@ app.post('/api/sos/alert', async (req, res) => {
 
 // --- SOCKET.IO ---
 io.on('connection', (socket) => {
+    console.log(`[SOCKET] New connection: ${socket.id}`);
+
     socket.on('join_room', (roomCode) => {
-        socket.join(`yousafe_${roomCode}`);
-        io.to(`yousafe_${roomCode}`).emit('room_joined', { message: 'Connected to Room' });
+        const roomName = `yousafe_${roomCode}`;
+        socket.join(roomName);
+        console.log(`[SOCKET] Socket ${socket.id} joined room: ${roomName}`);
+        io.to(roomName).emit('room_joined', { message: `Connected to Room: ${roomCode}` });
     });
 
     socket.on('location_update', (data) => {
-        socket.to(`yousafe_${data.code}`).emit('guardian_update', data);
+        const roomName = `yousafe_${data.code}`;
+        console.log(`[SOCKET] Location update from ${data.code} to ${roomName}`);
+        socket.to(roomName).emit('guardian_update', data);
     });
 
     socket.on('sos_trigger', (data) => {
-        io.to(`yousafe_${data.code}`).emit('sos_alert', data);
+        const roomName = `yousafe_${data.code}`;
+        console.log(`[SOCKET] SOS TRIGGER from ${data.code}! Broadcasting to ${roomName}`);
+        io.to(roomName).emit('sos_alert', data);
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`[SOCKET] Disconnected: ${socket.id}`);
     });
 });
 

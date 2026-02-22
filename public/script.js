@@ -539,18 +539,39 @@ const app = {
     // --- REAL-TIME (SOCKET) ---
 
     initSocket: () => {
-        if (!app.state.currentUser || typeof io === 'undefined') return;
+        if (!app.state.currentUser || typeof io === 'undefined') {
+            console.warn("[SOCKET] Cannot init: User missing or io undefined");
+            return;
+        }
 
+        console.log("[SOCKET] Connecting to server...");
         app.state.socket = io();
+
         app.state.socket.on('connect', () => {
+            console.log("[SOCKET] Connected! ID:", app.state.socket.id);
             const user = app.state.currentUser;
             const code = (user.type === 'woman') ? user.code : user.linkedCode;
-            if (code) app.state.socket.emit('join_room', code);
+            if (code) {
+                console.log("[SOCKET] Joining room:", code);
+                app.state.socket.emit('join_room', code);
+            }
+        });
+
+        app.state.socket.on('room_joined', (data) => {
+            console.log("[SOCKET] Room joined confirmation:", data.message);
+        });
+
+        app.state.socket.on('connect_error', (err) => {
+            console.error("[SOCKET] Connection Error:", err);
         });
 
         if (app.state.currentUser.type === 'guardian') {
-            app.state.socket.on('guardian_update', (data) => app.updateGuardianMap(data.lat, data.lng, data.status));
+            app.state.socket.on('guardian_update', (data) => {
+                console.log("[SOCKET] Received location update for monitored user");
+                app.updateGuardianMap(data.lat, data.lng, data.status);
+            });
             app.state.socket.on('sos_alert', (data) => {
+                console.error("[SOCKET] Received SOS ALERT!");
                 alert('URGENT: SOS ALERT FROM USER!');
                 app.updateGuardianMap(data.lat, data.lng, 'SOS ACTIVE');
                 if (navigator.vibrate) navigator.vibrate([500, 500, 500]);
@@ -559,15 +580,22 @@ const app = {
     },
 
     broadcastLocation: (isSos = false) => {
-        if (!navigator.geolocation || !app.state.socket) return;
+        if (!navigator.geolocation || !app.state.socket) {
+            console.warn("[LOC] Cannot broadcast: Geo or Socket missing");
+            return;
+        }
         navigator.geolocation.getCurrentPosition((pos) => {
-            app.state.socket.emit(isSos ? 'sos_trigger' : 'location_update', {
+            const event = isSos ? 'sos_trigger' : 'location_update';
+            console.log(`[LOC] Emitting ${event} for ${app.state.currentUser.code}`);
+            app.state.socket.emit(event, {
                 code: app.state.currentUser.code,
                 lat: pos.coords.latitude,
                 lng: pos.coords.longitude,
                 status: isSos ? 'SOS ACTIVE' : (app.state.nightMode ? 'In Night Mode' : 'Safe')
             });
-        }, null, { enableHighAccuracy: true });
+        }, (err) => {
+            console.error("[LOC] Geolocation failed:", err);
+        }, { enableHighAccuracy: true });
     },
 
     // --- MAPS ---
