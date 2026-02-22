@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YouSafe - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body class="registration-theme active">
+    <div id="toast" class="toast hidden">Notification</div>
+
+    <div id="app" class="page-container">
+        <section class="view active">
+            <div class="header" style="width: 100%; max-width: 420px; text-align: center; position: relative;">
+                <a href="index.html" class="icon-btn back-btn"
+                    style="text-decoration:none; display:flex; align-items:center; justify-content:center; position: absolute; left: 0; top: 0;">←</a>
+                <h2 style="margin-bottom: 0;">Welcome Back</h2>
+            </div>
+
+
+            <div class="auth-card" style="margin-top: 20px;">
+                <p class="choice-label" style="text-align: center; margin-bottom: 25px;">Please login to your account
+                </p>
+
+                <form id="login-form">
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="l-email" placeholder="email@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="l-password" placeholder="••••••••" required>
+                    </div>
+
+                    <input type="hidden" name="l-type" value="woman">
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login
+                        securely</button>
+                </form>
+
+                <p style="text-align: center; margin-top: 25px; font-size: 14px; color: #636e72;">
+                    Don't have an account? <br>
+                    <a href="index.html"
+                        style="color: var(--primary); text-decoration: none; font-weight: 600;">Register here</a>
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function selectRole(el) {
+            document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('active-role'));
+            el.classList.add('active-role');
+        }
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.role-chip').classList.add('active-role');
+        });
+    </script>
+    <style>
+        .role-chip {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #b2bec3;
+        }
+
+        .active-role {
+            background: rgba(108, 92, 231, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .registration-theme.active {
+            background: var(--bg);
+            min-height: 100vh;
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

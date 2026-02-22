@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YouSafe - Register</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body class="registration-theme">
+    <div id="toast" class="toast hidden">Notification</div>
+
+    <div id="app" class="page-container">
+        <!-- REGISTER WOMAN VIEW -->
+        <section class="view active">
+            <div class="header">
+                <a href="index.html" class="icon-btn back-btn"
+                    style="text-decoration:none; display:flex; align-items:center; justify-content:center;">←</a>
+                <h2>Create Profile</h2>
+            </div>
+            <form id="woman-reg-form">
+                <div class="input-group">
+                    <label>Your Name</label>
+                    <input type="text" id="w-name" placeholder="Jane Doe" required>
+                </div>
+                <div class="input-group">
+                    <label>Your Mobile No (Sender)</label>
+                    <input type="tel" id="w-mobile" placeholder="+91 Your Number" required>
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="w-email" placeholder="jane@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="w-password" placeholder="********" required>
+                </div>
+                <div class="input-group">
+                    <label>Guardian Mobile No (Receiver)</label>
+                    <input type="tel" id="w-contact" placeholder="+91 9999999999" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Secure My Account</button>
+            </form>
+        </section>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

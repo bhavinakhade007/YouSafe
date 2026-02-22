@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YouSafe - SOS ACTIVE</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body class="sos-body">
+    <div id="toast" class="toast hidden">Notification</div>
+
+    <div id="app" class="page-container" style="height:100vh;">
+        <!-- SOS LOCK SCREEN OVERLAY -->
+        <section class="view active overlay-mode" style="display:flex;">
+            <div class="overlay-content">
+                <div class="lock-icon">🔒</div>
+                <h2>Security Active</h2>
+                <p>System Locked due to detailed threat.</p>
+
+                <div class="fingerprint-scanner" id="biometric-trigger">
+                    <div class="fingerprint-ring"></div>
+                    <div class="energy-ring"></div>
+                    <div class="scan-fill"></div>
+                    <div class="fingerprint-icon">👆</div>
+                </div>
+                <p class="instruction">Hold to Verify & Send SOS</p>
+
+                <a href="dashboard.html"
+                    style="color:rgba(255,255,255,0.3); margin-top:50px; display:block; text-decoration:none;">Cancel
+                    (Safe)</a>
+            </div>
+
+            <!-- SUCCESS STATE (Hidden by default) -->
+            <div id="sos-success" class="overlay-content hidden" style="background: #00b894; z-index: 100;">
+                <div class="lock-icon">✅</div>
+                <h2>Help is on the way!</h2>
+                <p>Your location has been sent to your Guardians.</p>
+
+                <div id="sos-timeline"
+                    style="margin-top:20px; text-align:left; background:rgba(0,0,0,0.1); padding:15px; border-radius:10px; font-size:14px; color:white;">
+                    <div id="step-sms" style="margin-bottom:8px; opacity:0.5;">📡 SMS Alert: <span
+                            class="status">Waiting...</span></div>
+                    <div id="step-whatsapp" style="margin-bottom:8px; opacity:0.5;">💬 WhatsApp SOS: <span
+                            class="status">Pending (15s)</span></div>
+                    <div id="step-call" style="margin-bottom:8px; opacity:0.5;">📞 Phone Call: <span
+                            class="status">Pending (45s)</span></div>
+                </div>
+
+                <a href="dashboard.html" class="btn btn-primary"
+                    style="background:white; color:#00b894; margin-top:20px;">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

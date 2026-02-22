@@ -1,0 +1,33 @@
+{
+  "users": [
+    {
+      "id": "1771737362762",
+      "name": "meera",
+      "mobile": "+919737491423",
+      "email": "bhavinakhade@gmail.com",
+      "password": "123456",
+      "contact": "9727086318",
+      "code": "DNQEUV",
+      "type": "woman",
+      "guardians": []
+    },
+    {
+      "id": "1771738116844",
+      "name": "paresh",
+      "type": "guardian",
+      "linkedCode": "DNQEUV"
+    },
+    {
+      "id": "1771738214164",
+      "name": "paresh",
+      "type": "guardian",
+      "linkedCode": "DNQEUV"
+    },
+    {
+      "id": "1771740703583",
+      "name": "paresh",
+      "type": "guardian",
+      "linkedCode": "DNQEUV"
+    }
+  ]
+}

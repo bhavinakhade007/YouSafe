@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YouSafe - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- iOS/Mobile support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="YouSafe">
+    <link rel="apple-touch-icon" href="logo.png">
+</head>
+
+<body>
+    <div id="app" class="page-container">
+        <!-- LANDING VIEW -->
+        <section class="view active center-view">
+            <div class="auth-card">
+                <div class="brand-container">
+                    <div class="logo-shield">🛡️</div>
+                    <h1>Welcome to YouSafe</h1>
+                    <p class="tagline">Your safety companion</p>
+                </div>
+
+                <div class="role-selection">
+                    <p class="choice-label">Please choose your role to continue:</p>
+                    <div class="action-buttons">
+                        <a href="register-woman.html" class="btn btn-primary role-btn">
+                            <span class="icon">👩</span> I'm a Woman
+                        </a>
+                        <a href="register-guardian.html" class="btn btn-primary role-btn">
+                            <span class="icon">🛡️</span> I'm a Guardian
+                        </a>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="font-size: 14px; color: #636e72;">Already have an account?</p>
+                    <a href="login.html" class="btn"
+                        style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); width: 80%; margin: 10px auto; display: block;">Login
+                        Instead</a>
+                </div>
+
+                <div class="quote-box">
+                    ❤️<br>
+                    Empowering women with safety tools
+                </div>
+
+                <p class="disclaimer">⚠️ Prototype only - Not connected to real police</p>
+            </div>
+        </section>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker Registered!'))
+                    .catch(err => console.log('Service Worker Failed:', err));
+            });
+        }
+    </script>
+
+</body>
+
+</html>

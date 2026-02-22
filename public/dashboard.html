@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YouSafe - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+    <div id="toast" class="toast hidden">Notification</div>
+
+    <div id="app" class="page-container">
+        <!-- TOP NAVBAR -->
+        <nav class="navbar">
+            <div class="nav-brand">YouSafe</div>
+            <div class="nav-links">
+                <button class="nav-item btn-link" id="logout-btn">🚪 Logout</button>
+            </div>
+        </nav>
+
+        <!-- DASHBOARD (WOMAN) VIEW -->
+        <section class="view active">
+            <!-- EMERGENCY HERO -->
+            <div class="hero-banner">
+                <h2>Emergency SOS</h2>
+                <p>In case of danger, press the button below to send your location to emergency contacts and
+                    authorities.</p>
+
+                <a href="sos.html" class="send-sos-bar">
+                    <span class="warning-icon">⚠️</span> SEND SOS
+                </a>
+            </div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="quick-actions-section">
+                <h3>Quick Actions</h3>
+                <div class="quick-grid">
+                    <button class="action-btn" id="call-police">📞 Call Police</button>
+                    <button class="action-btn" id="share-location">📍 Share Location</button>
+                    <button class="action-btn" id="fake-call-btn">⚔️ Fake Call</button>
+                </div>
+            </div>
+
+            <div class="safety-card">
+                <div class="code-display">
+                    <span class="label">Your Safe Code</span>
+                    <h1 id="user-code">------</h1>
+                    <p>Share this with your guardian</p>
+                </div>
+            </div>
+
+            <!-- BOTTOM CENTERED ACTIONS -->
+            <div class="bottom-actions-container">
+                <div class="feature-card" id="night-mode-btn" style="max-width: 160px; margin: 0 10px;">
+                    <div class="icon">🌙</div>
+                    <span>Night Mode</span>
+                    <div class="toggle-status" id="night-mode-status">OFF</div>
+                </div>
+                <div class="feature-card" id="install-app-btn" style="display: none; max-width: 160px; margin: 0 10px;">
+                    <div class="icon">📲</div>
+                    <span>Install App</span>
+                    <div class="toggle-status">READY</div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- DARK FOOTER -->
+        <footer class="app-footer">
+            <p>© 2024 YouSafe. Stay Safe, Stay Strong.</p>
+            <p class="disclaimer">⚠️ This is a prototype – Not connected to real emergency services</p>
+        </footer>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
