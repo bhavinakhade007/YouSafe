@@ -28,8 +28,9 @@ const PORT = process.env.PORT || 3000;
 const DB_FILE = 'data.json';
 
 // --- MIDDLEWARE ---
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+
 app.use(session({
     secret: 'yousafe-secret-key-123',
     resave: false,
@@ -185,7 +186,13 @@ app.post('/api/sos/alert', async (req, res) => {
     }
 });
 
+// Fallback to index.html for any unknown routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // --- SOCKET.IO REAL-TIME ---
+
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
