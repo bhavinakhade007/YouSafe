@@ -621,10 +621,7 @@ const app = {
             const el = document.getElementById('map');
             if (!el || el._leaflet_id || typeof L === 'undefined') return;
 
-            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const url = isDark
-                ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-                : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+            const url = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
             app.state.map = L.map('map').setView([20, 0], 2);
             app.state.tileLayer = L.tileLayer(url, { attribution: '&copy; CARTO', maxZoom: 20 }).addTo(app.state.map);
