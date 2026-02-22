@@ -9,6 +9,9 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Trust proxy for Render/Cloud environments
+app.set('trust proxy', 1);
+
 // --- TWILIO CONFIG ---
 const twilio = require('twilio');
 const TWILIO_SID = process.env.TWILIO_SID || 'YOUR_ACCOUT_SID_HERE';
