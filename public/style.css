@@ -641,6 +641,8 @@ body.registration-theme .back-btn {
     background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
     transform: rotate(45deg);
     animation: shimmer 4s infinite;
+    pointer-events: none;
+    /* Critical: Allow clicks to pass through to buttons below */
 }
 
 
@@ -675,7 +677,8 @@ body.registration-theme .back-btn {
 }
 
 .feature-card {
-    background: var(--card-bg);
+    background: rgba(255, 255, 255, 0.15);
+    /* Slightly clearer on mobile */
     padding: 20px;
     border-radius: 16px;
     display: flex;
@@ -686,8 +689,19 @@ body.registration-theme .back-btn {
     border: 1px solid var(--glass-border);
     transition: all 0.3s ease;
     flex: 1;
-    min-width: 140px;
-    max-width: 180px;
+    min-width: 130px;
+    position: relative;
+    z-index: 2;
+    /* Ensure it's above the shimmer just in case */
+}
+
+.bottom-actions-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    z-index: 5;
 }
 
 .feature-card:hover {

@@ -64,7 +64,7 @@ const app = {
             console.log(`[ROUTING] Logic for filename: ${filename}`);
 
             // If on landing pages (Root or index.html)
-            if (filename === 'index.html' || filename === '') {
+            if (filename === 'index.html' || filename === 'index' || filename === '') {
                 if (user) {
                     console.log("[ROUTING] Active session found. Redirecting to app...");
                     const target = (user.type === 'woman') ? 'dashboard.html' : 'guardian.html';
@@ -88,7 +88,7 @@ const app = {
             }
 
             // Dashboard Protection
-            if (filename === 'dashboard.html') {
+            if (filename === 'dashboard.html' || filename === 'dashboard') {
                 if (!user || user.type !== 'woman') {
                     console.error("[ROUTING] SESSION ERROR: Woman profile required. Redirecting to index.");
                     window.location.replace('index.html');
@@ -140,7 +140,14 @@ const app = {
         if (logoutBtn) logoutBtn.addEventListener('click', app.logout);
 
         const nmBtn = document.getElementById('night-mode-btn');
-        if (nmBtn) nmBtn.onclick = app.toggleNightMode;
+        if (nmBtn) {
+            console.log("[DASH] Attaching Night Mode listener");
+            nmBtn.onclick = (e) => {
+                e.preventDefault();
+                console.log("[DASH] Night Mode clicked");
+                app.toggleNightMode();
+            };
+        }
 
         const fcBtn = document.getElementById('fake-call-btn');
         if (fcBtn) fcBtn.onclick = app.testFakeCall;
@@ -153,11 +160,20 @@ const app = {
         // PWA Install Logic
         const installBtn = document.getElementById('install-app-btn');
         if (installBtn) {
-            if (app.state.deferredPrompt) installBtn.style.display = 'flex';
-            installBtn.onclick = async () => {
-                if (!app.state.deferredPrompt) return;
+            if (app.state.deferredPrompt) {
+                console.log("[DASH] Install prompt available, showing button");
+                installBtn.style.display = 'flex';
+            }
+            installBtn.onclick = async (e) => {
+                e.preventDefault();
+                console.log("[DASH] Install button clicked");
+                if (!app.state.deferredPrompt) {
+                    console.warn("[DASH] No deferredPrompt found");
+                    return;
+                }
                 app.state.deferredPrompt.prompt();
                 const { outcome } = await app.state.deferredPrompt.userChoice;
+                console.log("[DASH] Install outcome:", outcome);
                 if (outcome === 'accepted') {
                     installBtn.style.display = 'none';
                     app.state.deferredPrompt = null;
