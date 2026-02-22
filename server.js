@@ -28,8 +28,30 @@ const PORT = process.env.PORT || 3000;
 const DB_FILE = 'data.json';
 
 // --- MIDDLEWARE ---
-app.use(express.static(path.join(__dirname, 'public')));
+const publicPath = path.join(__dirname, 'public');
+console.log(`[SERVER] Serving static files from: ${publicPath}`);
+if (fs.existsSync(publicPath)) {
+    console.log(`[SERVER] Public directory found. Contents: ${fs.readdirSync(publicPath)}`);
+} else {
+    console.error(`[SERVER] CRITICAL: Public directory NOT found at ${publicPath}`);
+}
+app.use((req, res, next) => {
+    console.log(`[REQUEST] ${req.method} ${req.url}`);
+    next();
+});
+
+app.use(express.static(publicPath));
+
+// Explicit routes for main pages (backup for static serving)
+app.get('/', (req, res) => res.sendFile(path.join(publicPath, 'index.html')));
+app.get('/login.html', (req, res) => res.sendFile(path.join(publicPath, 'login.html')));
+app.get('/dashboard.html', (req, res) => res.sendFile(path.join(publicPath, 'dashboard.html')));
+app.get('/guardian.html', (req, res) => res.sendFile(path.join(publicPath, 'guardian.html')));
+app.get('/sos.html', (req, res) => res.sendFile(path.join(publicPath, 'sos.html')));
+
 app.use(express.json());
+
+
 
 app.use(session({
     secret: 'yousafe-secret-key-123',
@@ -186,12 +208,9 @@ app.post('/api/sos/alert', async (req, res) => {
     }
 });
 
-// Fallback to index.html for any unknown routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 
 // --- SOCKET.IO REAL-TIME ---
+
 
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
