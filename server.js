@@ -33,11 +33,18 @@ const DB_FILE = 'data.json';
 // --- MIDDLEWARE ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+
 app.use(session({
     secret: 'yousafe-secret-key-123',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
+    cookie: {
+        secure: isProduction, // Use secure cookies on HTTPS (Render)
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: isProduction ? 'lax' : 'lax'
+    }
 }));
 
 // Serve static files from 'public'
@@ -91,6 +98,8 @@ app.post('/api/register', (req, res) => {
 // Login User
 app.post('/api/login', (req, res) => {
     const { email, password, type } = req.body;
+    console.log(`[AUTH] Login attempt: ${email} (${type})`);
+
     const db = getDB();
     const user = db.users.find(u =>
         u.type === type &&
@@ -99,20 +108,29 @@ app.post('/api/login', (req, res) => {
     );
 
     if (user) {
+        console.log(`[AUTH] Login success for: ${email}`);
         req.session.userId = user.id;
         req.session.userType = user.type;
         res.json({ success: true, user });
     } else {
+        console.warn(`[AUTH] Login failed for: ${email}. User not found or wrong password.`);
         res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 });
 
 app.get('/api/me', (req, res) => {
-    if (!req.session.userId) return res.status(401).json({ success: false });
+    if (!req.session.userId) {
+        console.log("[AUTH] No session found for /api/me");
+        return res.status(401).json({ success: false });
+    }
     const db = getDB();
     const user = db.users.find(u => u.id === req.session.userId);
-    if (user) res.json({ success: true, user });
-    else res.status(401).json({ success: false });
+    if (user) {
+        res.json({ success: true, user });
+    } else {
+        console.warn("[AUTH] Session exists but user not found in DB");
+        res.status(401).json({ success: false });
+    }
 });
 
 app.post('/api/logout', (req, res) => {

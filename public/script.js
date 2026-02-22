@@ -33,6 +33,10 @@ const app = {
             const user = app.state.currentUser;
             const isLocalFile = window.location.protocol === 'file:';
 
+            // 3. Routing & Protection Logic
+            const lowercasePath = path.toLowerCase();
+            const filename = lowercasePath.split('/').pop() || 'index.html';
+
             // --- DEBUG OVERLAY ---
             const debugEl = document.createElement('div');
             debugEl.style = "position:fixed;top:70px;right:10px;background:rgba(0,0,0,0.8);color:#00ff00;padding:8px 12px;font-size:10px;z-index:99;font-family:monospace;border-radius:20px;border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(5px);pointer-events:none;box-shadow:0 5px 15px rgba(0,0,0,0.3);";
@@ -56,10 +60,6 @@ const app = {
 
             console.log("Current Path:", path);
             console.log("Current User:", user);
-
-            // 3. Routing & Protection Logic
-            const lowercasePath = path.toLowerCase();
-            const filename = lowercasePath.split('/').pop() || 'index.html';
 
             console.log(`[ROUTING] Logic for filename: ${filename}`);
 
@@ -292,18 +292,25 @@ const app = {
                 body: JSON.stringify({ email, password, type })
             });
 
+            console.log("[LOGIN] Server response status:", res.status);
             const data = await res.json();
+            console.log("[LOGIN] Server response data:", data);
+
             if (data.success) {
+                console.log("[LOGIN] Success! Saving user and redirecting...");
                 app.saveUser(data.user);
                 const target = (data.user.type === 'woman') ? 'dashboard.html' : 'guardian.html';
+                console.log(`[LOGIN] Target: ${target}`);
                 window.location.replace(target);
             } else {
-                alert('Login Failed: ' + (data.message || 'Check credentials'));
+                console.warn("[LOGIN] Failed:", data.message);
+                const errorMsg = data.message || 'Check credentials';
+                alert('Login Failed: ' + errorMsg);
                 if (btn) btn.disabled = false;
             }
         } catch (err) {
-            console.error(err);
-            alert('Server Error during login.');
+            console.error("[LOGIN] Network or Server Error:", err);
+            alert('Server Connection Error. If this is on Render, the server might be starting up. Please wait a minute and try again.');
             if (btn) btn.disabled = false;
         }
     },
@@ -338,6 +345,7 @@ const app = {
                 localStorage.removeItem('yousafe_user');
             }
         } catch (err) {
+            console.error("[SESSION] Check failed (Network/Server Error):", err);
             app.loadUser(); // Fallback
         }
     },
