@@ -19,14 +19,11 @@ const app = {
         try {
             console.log("%c--- YouSafe Initialization Started ---", "color: blue; font-weight: bold;");
 
-            // 1. Force Clear SW if still active (to prevent stale code)
+            // 1. Register Service Worker (Required for PWA Install)
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(regs => {
-                    for (let r of regs) {
-                        r.unregister();
-                        console.log("Service Worker Unregistered");
-                    }
-                });
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log("Service Worker Registered:", reg.scope))
+                    .catch(err => console.error("Service Worker Registration Failed:", err));
             }
 
             // 2. Load User Session (Check Server first)
@@ -38,14 +35,13 @@ const app = {
 
             // --- DEBUG OVERLAY ---
             const debugEl = document.createElement('div');
-            debugEl.style = "position:fixed;bottom:10px;right:10px;background:rgba(0,0,0,0.9);color:#00ff00;padding:12px;font-size:12px;z-index:10000;font-family:monospace;border-radius:8px;border:1px solid #444;box-shadow:0 10px 30px rgba(0,0,0,0.8);pointer-events:none;";
+            debugEl.style = "position:fixed;top:70px;right:10px;background:rgba(0,0,0,0.8);color:#00ff00;padding:8px 12px;font-size:10px;z-index:99;font-family:monospace;border-radius:20px;border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(5px);pointer-events:none;box-shadow:0 5px 15px rgba(0,0,0,0.3);";
             debugEl.id = "yousafe-debug";
             debugEl.innerHTML = `
-                <div style="font-weight:bold;margin-bottom:5px;border-bottom:1px solid #444;color:#ff00ff;">YouSafe Debug Monitor</div>
-                Protocol: <span style="color:${isLocalFile ? '#ff4444' : '#00ff00'}">${isLocalFile ? 'WRONG (file://)' : 'CORRECT (http://)'}</span><br>
-                Path: ${path}<br>
-                User: ${user ? user.type : 'NONE'}<br>
-                Storage: ${localStorage.getItem('yousafe_user') ? 'OK' : 'EMPTY'}
+                <span style="font-weight:bold;color:#ff00ff;">YouSafe Debug:</span> 
+                Proto: <span style="color:${isLocalFile ? '#ff4444' : '#00ff00'}">${isLocalFile ? 'ERR' : 'OK'}</span> | 
+                Path: ${filename} | 
+                User: ${user ? user.type : 'NONE'}
             `;
             document.body.appendChild(debugEl);
 
