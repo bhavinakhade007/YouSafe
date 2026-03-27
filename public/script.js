@@ -37,17 +37,7 @@ const app = {
             const lowercasePath = path.toLowerCase();
             const filename = lowercasePath.split('/').pop() || 'index.html';
 
-            // --- DEBUG OVERLAY ---
-            const debugEl = document.createElement('div');
-            debugEl.style = "position:fixed;top:70px;right:10px;background:rgba(0,0,0,0.8);color:#00ff00;padding:8px 12px;font-size:10px;z-index:99;font-family:monospace;border-radius:20px;border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(5px);pointer-events:none;box-shadow:0 5px 15px rgba(0,0,0,0.3);";
-            debugEl.id = "yousafe-debug";
-            debugEl.innerHTML = `
-                <span style="font-weight:bold;color:#ff00ff;">YouSafe Debug:</span> 
-                Proto: <span style="color:${isLocalFile ? '#ff4444' : '#00ff00'}">${isLocalFile ? 'ERR' : 'OK'}</span> | 
-                Path: ${filename} | 
-                User: ${user ? user.type : 'NONE'}
-            `;
-            document.body.appendChild(debugEl);
+
 
             if (isLocalFile) {
                 console.error("CRITICAL: You are running this as a local file!");
